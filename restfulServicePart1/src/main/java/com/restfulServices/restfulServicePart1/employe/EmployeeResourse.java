@@ -3,6 +3,7 @@ package com.restfulServices.restfulServicePart1.employe;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class EmployeeResourse {
     private EmployeeDaoService service;
 
     @GetMapping(path = "/employees")
+    @ApiModelProperty(notes = "All employees details")
     public List<Employee> getAllEmp(){
         return service.findAll();
     }
 
     @GetMapping(path = "/employees/{id}")
+    @ApiModelProperty(notes = "employee detail")
     public EntityModel<Employee> getEmp(@PathVariable int id){
         Employee emp =  service.findOne(id);
         if(emp == null) throw new EmployeeNotFoundException("id- " + id);
@@ -35,11 +38,13 @@ public class EmployeeResourse {
         return resource;
     }
     @DeleteMapping(path = "/employees/{id}")
+    @ApiModelProperty(notes = "Delete employee")
     public void deleteEmp(@PathVariable int id){
         Employee emp =  service.delete(id);
         if(emp.getId() == null) throw new EmployeeNotFoundException("id- " + id);
     }
     @PutMapping("/employees")
+    @ApiModelProperty(notes = "update employee details")
     public ResponseEntity<Object> updateEmployee(@Valid @RequestBody Employee employee) throws EmployeeNotFoundException {
         Employee employee1 = service.updateEmployeeDetails(employee);
         if (employee1 == null)
@@ -52,6 +57,7 @@ public class EmployeeResourse {
     }
 
     @PostMapping("/employees")
+    @ApiModelProperty(notes = "create employee")
     public ResponseEntity<Object> getEmp(@Valid @RequestBody Employee emp){
         Employee emp1 =  service.saveEmployee(emp);
         URI location = ServletUriComponentsBuilder
